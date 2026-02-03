@@ -29,6 +29,7 @@ This project is intentionally structured to keep game logic independent of the u
 
 ## 📁 Project Structure
 
+```
 src/
 └── minesweeper
 ├── engine
@@ -42,6 +43,7 @@ src/
 └── console
 ├── ConsoleApp.java
 └── ConsoleRenderer.java
+```
 
 ## ▶️ How to Run
 

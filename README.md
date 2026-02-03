@@ -2,6 +2,8 @@
 
 A console-based implementation of the classic Minesweeper game, built in Java with a strong focus on clean architecture, separation of concerns and readable, maintainable code.
 
+![minesweeper](/minesweeper.png)
+
 ## 🎮 Features
 
 - Playable Minesweeper game in the terminal
@@ -27,7 +29,8 @@ This project is intentionally structured to keep game logic independent of the u
 
 ## 📁 Project Structure
 
-minesweeper
+src/
+└── minesweeper
 ├── engine
 │ ├── Game.java
 │ ├── Board.java

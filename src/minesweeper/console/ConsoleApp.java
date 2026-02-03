@@ -40,7 +40,55 @@ public class ConsoleApp {
         System.out.println(RESET);
     }
 
+    private static int askForNumber(Scanner scanner, String prompt, int min, int max) {
 
+        while(true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine().trim();
+
+            if (input.equalsIgnoreCase("q")) {
+               throw new RuntimeException("QUIT");
+            }
+
+            try{
+                int value = Integer.parseInt(input);
+
+                if (value < min || value > max) {
+                    System.out.println("Please enter a number between " + min + " and " + max + ".");
+                    continue;
+                } 
+                    return value;
+            }
+            catch (NumberFormatException e) {
+                System.out.println("Invalid number. Try again.");
+            }
+        }
+    }
+
+    private static GameConfig askUserForConfig(Scanner scanner) {
+
+        try {
+            System.out.println();
+            System.out.println("Game Setup (Q to quit)");
+
+            int rows = askForNumber(scanner, "Enter number of rows (2-20): ", 2, 20);
+            int cols = askForNumber(scanner, "Enter number of columns (2-20): ", 2,20);
+
+            int cells = rows * cols;
+            int maxByDensity = (int) Math.floor(cells * 0.25);
+            int maxMines = Math.max(1, Math.min(maxByDensity, cells - 1));
+            int mines = askForNumber(scanner, "Enter number of mines (1-" + maxMines + "): ", 1, maxMines);
+
+            return new GameConfig(rows, cols, mines);
+
+        } catch (RuntimeException e) {
+            if ("QUIT".equals(e.getMessage())) {
+                return null;
+            }
+            throw e;
+        }
+}
+    
 
     public static void main(String[] args) {
        
@@ -48,7 +96,12 @@ public class ConsoleApp {
         boolean playAgain = true;
 
         while (playAgain) {
-            Game game = new Game(GameConfig.defaultConfig());
+            GameConfig config = askUserForConfig(scanner);
+            if (config == null) {
+                System.out.println("Bye!");
+                break; 
+            }
+            Game game = new Game(config);
             ConsoleRenderer renderer = new ConsoleRenderer();
                 
             for (int i = 0; i < 3; i++) System.out.println();
@@ -64,6 +117,7 @@ public class ConsoleApp {
 
                 if (input.equalsIgnoreCase("q")) {
                     System.out.println("Bye!");
+                    quitToDesktop = true;
                     break;
                 }
 
@@ -152,7 +206,7 @@ public class ConsoleApp {
             }
 
             if (quitToDesktop) {
-               break; // exits outer playAgain loop too
+               break; 
             }
 
             System.out.println();
